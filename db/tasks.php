@@ -28,12 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 $tasks = [
     [
         'classname' => 'local_quickstats\task\update_active_users',
-        'blocking' => 0,
-        'minute' => '0',
-        'hour' => '0',
-        'day' => '*',
-        'month' => '*',
+        'blocking'  => 0,
+        'minute'    => '0',
+        'hour'      => '0',
+        'day'       => '*',
+        'month'     => '*',
         'dayofweek' => '*',
-        'enabled' => 1,
-    ],
+        'enabled'   => 1
+    ]
 ];

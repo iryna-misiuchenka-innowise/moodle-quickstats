@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 $plugin->component = 'local_quickstats';
-$plugin->version = 2025012300;
-$plugin->requires = 2024100701;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0.0';
+$plugin->version   = 2025012300;
+$plugin->requires  = 2024100701;
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = '1.0.0';

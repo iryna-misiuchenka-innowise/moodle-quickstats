@@ -52,9 +52,9 @@ class quickstats_test extends advanced_testcase {
     
         $record = (object)[
             'activeuserscount' => '2',
-            'periodstart' => time() - 10,
-            'periodend' => time(),
-            'timecreated' => time()
+            'periodstart'      => time() - 10,
+            'periodend'        => time(),
+            'timecreated'      => time()
         ];
         $recordid = $DB->insert_record('local_quickstats', $record);
     
@@ -69,22 +69,44 @@ class quickstats_test extends advanced_testcase {
      *
      * @return void
      */
-    public function test_active_user_count() {
+    public function test_active_user_count(): void
+    {
         global $DB;
 
         $this->resetAfterTest();
 
-        $user1 = $this->getDataGenerator()->create_user(['lastaccess' => time() - (2 * DAYSECS)]);
-        $user2 = $this->getDataGenerator()->create_user(['lastaccess' => time() - (5 * DAYSECS)]);
-        $user3 = $this->getDataGenerator()->create_user(['lastaccess' => time() - (10 * DAYSECS)]);
+        $currentTime = time();
+
+        $this->createTestUsers([
+            $currentTime - (2 * DAYSECS),
+            $currentTime - (5 * DAYSECS),
+            $currentTime - (10 * DAYSECS),
+        ]);
 
         set_config('days', 7, 'local_quickstats');
+        $activeDays = (int)get_config('local_quickstats', 'days');
 
-        $days = get_config('local_quickstats', 'days');
-        $timecutoff = time()- ($days * DAYSECS);
+        $timeCutoff = $currentTime - ($activeDays * DAYSECS);
 
-        $expectedCount = $DB->count_records_select('user', "lastaccess >= ?", [$timecutoff]);
+        $activeUserCount = $DB->count_records_select('user', "lastaccess >= ?", [$timeCutoff]);
 
-        $this->assertEquals(2, $expectedCount, 'The active user count should be 2 for the last 7 days.');
+        $this->assertEquals(
+            2,
+            $activeUserCount,
+            get_string('active_user_count', 'local_quickstats')
+        );
+    }
+
+    /**
+     * Helper method to create test users with specific last access times.
+     *
+     * @param array $lastAccessTimes Array of timestamps for user 'lastaccess'.
+     * @return void
+     */
+    private function createTestUsers(array $lastAccessTimes): void
+    {
+        foreach ($lastAccessTimes as $lastAccess) {
+            $this->getDataGenerator()->create_user(['lastaccess' => $lastAccess]);
+        }
     }
 }

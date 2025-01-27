@@ -31,8 +31,10 @@ require.config({
 
 // Define the module
 define(['jquery', 'quickstats/chartjs'], function($, Chart) {
+
     return {
         init: function() {
+
             const chartContainer = $('#quickstats-chart');
 
             if (!chartContainer.length) {
@@ -53,14 +55,14 @@ define(['jquery', 'quickstats/chartjs'], function($, Chart) {
                         data: chartData.map(item => item.count),
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderWidth: 2,
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     scales: {
                         x: {title: {display: true, text: 'Date'}},
-                        y: {title: {display: true, text: 'Users'}},
+                        y: {title: {display: true, text: 'Users'}}
                     }
                 }
             });

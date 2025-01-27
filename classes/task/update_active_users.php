@@ -35,7 +35,8 @@ use core\task\scheduled_task;
  *
  * @package   local_quickstats
  */
-class update_active_users extends scheduled_task {
+class update_active_users extends scheduled_task
+{
 
     /**
      * Get the task's name.
@@ -44,7 +45,8 @@ class update_active_users extends scheduled_task {
      *
      * @return string Task name.
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('taskname', 'local_quickstats');
     }
 
@@ -56,20 +58,23 @@ class update_active_users extends scheduled_task {
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         global $DB;
 
         $days = get_config('local_quickstats', 'days');
-        $time = time() - ($days * 24 * 60 * 60);
-        
-        $count = $DB->count_records_select('user', "lastaccess >= ?", [$time]);
+        $time = (time() - ($days * DAYSECS));
 
-        $record = new \stdClass();
-        $record->activeuserscount = $count;
-        $record->periodstart = $time;
-        $record->periodend = time();
-        $record->timecreated = time();
+        $count = $DB->count_records_select('user', 'lastaccess >= ?', [$time]);
+
+        $record = (object)[
+            'activeuserscount' => $count,
+            'periodstart'      => $time,
+            'periodend'        => time(),
+            'timecreated'      => time()
+        ];
 
         $DB->insert_record('local_quickstats', $record);
+
     }
 }
